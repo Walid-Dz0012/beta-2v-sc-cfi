@@ -1,0 +1,22 @@
+# التبعيات
+node_modules/
+npm-debug.log*
+
+# المتغيرات البيئية
+.env
+.env.local
+.env.development.local
+
+# قاعدة البيانات المحلية
+*.db
+*.sqlite
+
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
