@@ -39,3 +39,22 @@ export default function LoginPage() {
     </div>
   )
 }
+const API_URL = 'https://beta-2v-sc-cfi.vercel.app/api/v1'
+
+const handleLogin = async () => {
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    })
+    
+    const data = await response.json()
+    console.log('نجاح:', data)
+  } catch (error) {
+    console.error('خطأ:', error)
+  }
+}
