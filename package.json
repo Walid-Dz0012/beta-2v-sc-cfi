@@ -1,12 +1,22 @@
 {
-  "name": "cfi-zoe-api",
-  "version": "1.0.0",
+  "name": "beta-2v-sc-cfi",
+  "version": "2.0.0",
+  "description": "CFI ZOE Social Media Platform API",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
+    // ⚠️ لا تضيف "build" script هنا
+  },
+  "engines": {
+    "node": "18.x"
   },
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5"
-  }
+    // ⚠️ لا تضيف مكتبات تحتاج build
+  },
+  "keywords": ["social", "api", "cfi", "vercel"],
+  "author": "CFI Team",
+  "license": "MIT"
 }
