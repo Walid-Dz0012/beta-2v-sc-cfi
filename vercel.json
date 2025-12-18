@@ -5,3 +5,16 @@
   "outputDirectory": ".next",
   "framework": "nextjs"
 }
+{
+  "functions": {
+    "api/server.js": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/server.js"
+    }
+  ]
+}
