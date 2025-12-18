@@ -221,4 +221,86 @@ router.put('/:userId', authenticate, async (req, res) => {
 // 🗑️ حذف مستخدم (تعطيل)
 router.delete('/:userId', authenticate, requireRole('admin'), async (req, res) => {
   try {
-    const { userId } =
+    const { userId } = req.params;
+    
+    // منع حذف المسؤول الرئيسي
+    if (userId === req.user._id.toString()) {
+      return res.status(400).json({
+        success: false,
+        error: 'لا يمكنك حذف حسابك الخاص',
+        code: 'SELF_DELETE_NOT_ALLOWED'
+      });
+    }
+    
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { isActive: false },
+      { new: true }
+    );
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'المستخدم غير موجود',
+        code: 'USER_NOT_FOUND'
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'تم تعطيل المستخدم بنجاح',
+      data: { userId: user._id }
+    });
+    
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'خطأ في الخادم',
+      code: 'SERVER_ERROR'
+    });
+  }
+});
+
+// 📱 إدارة أجهزة المستخدم
+router.get('/:userId/devices', authenticate, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    if (req.user.role !== 'admin' && req.user._id.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        error: 'غير مصرح بالوصول',
+        code: 'ACCESS_DENIED'
+      });
+    }
+    
+    const user = await User.findById(userId).select('registeredDevices maxDevices');
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'المستخدم غير موجود',
+        code: 'USER_NOT_FOUND'
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: {
+        devices: user.registeredDevices,
+        deviceCount: user.registeredDevices.length,
+        maxDevices: user.maxDevices,
+        canAddMore: user.registeredDevices.length < user.maxDevices
+      }
+    });
+    
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'خطأ في الخادم',
+      code: 'SERVER_ERROR'
+    });
+  }
+});
+
+module.exports = router;
